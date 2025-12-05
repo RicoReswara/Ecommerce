@@ -764,10 +764,6 @@ updated_at       | Auto-updated timestamp
 
 ---
 
-## 👨‍💻 Author
 
-Developed by: Rico
-
----
 
 
