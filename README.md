@@ -764,17 +764,10 @@ updated_at       | Auto-updated timestamp
 
 ---
 
-## 📄 License
-
-Proprietary. Semua hak cipta dilindungi.
-
----
-
 ## 👨‍💻 Author
 
-Developed by: [Your Name/Company]
-Last Updated: November 29, 2025
+Developed by: Rico
 
 ---
 
-**✅ Siap untuk production! Happy coding! 🚀**
+
