@@ -112,11 +112,13 @@ include 'header_admin.php';
                                         <?php endif; ?>
                                     </td>
                                     <td>
-                                        <?php if ($product['featured']): ?>
-                                            <span class="badge bg-danger">Ya</span>
-                                        <?php else: ?>
-                                            <span class="badge bg-secondary">Tidak</span>
-                                        <?php endif; ?>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-toggle-featured <?php echo $product['featured'] ? 'btn-danger' : 'btn-outline-secondary'; ?>"
+                                                data-id="<?php echo $product['id']; ?>"
+                                                data-featured="<?php echo $product['featured']; ?>">
+                                            <i class="bi bi-star<?php echo $product['featured'] ? '-fill' : ''; ?>"></i>
+                                            <?php echo $product['featured'] ? 'Featured' : 'Not Featured'; ?>
+                                        </button>
                                     </td>
                                     <td>
                                         <div class="btn-group btn-group-sm">

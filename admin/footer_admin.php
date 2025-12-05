@@ -136,6 +136,56 @@
             });
         }
         
+        // AJAX Toggle Featured
+        if (e.target.closest('.btn-toggle-featured')) {
+            e.preventDefault();
+            const btn = e.target.closest('.btn-toggle-featured');
+            const productId = btn.getAttribute('data-id');
+            const currentFeatured = btn.getAttribute('data-featured');
+            
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+            
+            const formData = new FormData();
+            formData.append('action', 'toggle_featured');
+            formData.append('id', productId);
+            
+            fetch('../api/admin_handler.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    // Update button appearance
+                    if (data.featured == 1) {
+                        btn.classList.remove('btn-outline-secondary');
+                        btn.classList.add('btn-danger');
+                        btn.innerHTML = '<i class="bi bi-star-fill"></i> Featured';
+                        btn.setAttribute('data-featured', '1');
+                    } else {
+                        btn.classList.remove('btn-danger');
+                        btn.classList.add('btn-outline-secondary');
+                        btn.innerHTML = '<i class="bi bi-star"></i> Not Featured';
+                        btn.setAttribute('data-featured', '0');
+                    }
+                    btn.disabled = false;
+                } else {
+                    showToast(data.message, 'danger');
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Terjadi kesalahan saat mengupdate status featured', 'danger');
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            });
+        }
+        
         // AJAX Delete User
         if (e.target.closest('.btn-delete-user')) {
             e.preventDefault();

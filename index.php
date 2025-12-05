@@ -2,10 +2,11 @@
 $page_title = "Beranda";
 include 'header.php';
 
-// Get latest products
+// Get featured products
 $featured_query = "SELECT p.*, c.cat_title
                    FROM products p
                    LEFT JOIN categories c ON p.product_cat = c.cat_id
+                   WHERE p.featured = 1
                    ORDER BY p.id DESC
                    LIMIT 8";
 $featured_result = mysqli_query($conn, $featured_query);
@@ -108,8 +109,18 @@ $cat_result = mysqli_query($conn, $cat_query);
                                     <img src="<?php echo BASE_URL . '/' . $category_image; ?>" 
                                          class="category-image mb-3" 
                                          alt="<?php echo clean($category['cat_title']); ?>">
-                                <?php else: ?>
-                                    <i class="bi bi-tag-fill text-primary fs-1 mb-3"></i>
+                                <?php else: 
+                                    // Icon mapping berdasarkan kategori
+                                    $category_icons = [
+                                        'Laptops' => 'bi-laptop',
+                                        'Smartphones' => 'bi-phone',
+                                        'Cameras' => 'bi-camera',
+                                        'Accessories' => 'bi-headphones',
+                                        'Fashion' => 'bi-bag-heart'
+                                    ];
+                                    $icon = $category_icons[$category['cat_title']] ?? 'bi-tag-fill';
+                                ?>
+                                    <i class="bi <?php echo $icon; ?> text-primary fs-1 mb-3"></i>
                                 <?php endif; ?>
                                 <h6 class="fw-bold text-dark"><?php echo clean($category['cat_title']); ?></h6>
                             </div>
