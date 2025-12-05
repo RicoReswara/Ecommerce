@@ -7,7 +7,7 @@
  * Default Laragon: host=localhost, user=root, password=empty
  */
 
-$servername = "localhost:3306";
+$servername = "localhost:3307";
 $username = "root";
 $password = "";
 $db = "ecommerce2";
