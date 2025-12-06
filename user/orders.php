@@ -2,6 +2,7 @@
 $page_title = "Pesanan Saya";
 require_once '../db.php';
 require_once '../config.php';
+require_once '../midtrans_config.php';
 
 // Require login
 require_login();
@@ -86,6 +87,13 @@ include '../header.php';
                                                 <span>Total</span>
                                                 <strong class="text-primary"><?php echo format_rupiah($order['total']); ?></strong>
                                             </div>
+                                            <?php if ($order['status'] == 'pending' && !empty($order['snap_token'])): ?>
+                                            <div class="d-grid mt-3">
+                                                <button class="btn btn-warning btn-pay-now" data-snap-token="<?php echo $order['snap_token']; ?>">
+                                                    <i class="bi bi-credit-card"></i> Bayar Sekarang
+                                                </button>
+                                            </div>
+                                            <?php endif; ?>
                                             <hr>
                                             <h6 class="fw-bold mb-2">Pengiriman</h6>
                                             <p class="small mb-1"><?php echo nl2br(clean($order['shipping_address'])); ?></p>
@@ -113,5 +121,47 @@ include '../header.php';
         </div>
     <?php endif; ?>
 </div>
+
+<!-- Load Midtrans Snap JS -->
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?php echo MIDTRANS_CLIENT_KEY; ?>"></script>
+<script>
+window.addEventListener('load', function() {
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-pay-now')) {
+            e.preventDefault();
+            const btn = e.target.closest('.btn-pay-now');
+            const snapToken = btn.getAttribute('data-snap-token');
+            
+            if (typeof snap === 'undefined') {
+                alert('Payment gateway sedang dimuat. Silakan coba lagi.');
+                return;
+            }
+            
+            if (!snapToken) {
+                alert('Token pembayaran tidak ditemukan.');
+                return;
+            }
+            
+            snap.pay(snapToken, {
+                onSuccess: function(result) {
+                    console.log('Payment success:', result);
+                    window.location.reload();
+                },
+                onPending: function(result) {
+                    console.log('Payment pending:', result);
+                    window.location.reload();
+                },
+                onError: function(result) {
+                    console.error('Payment error:', result);
+                    alert('Pembayaran gagal! Silakan coba lagi.');
+                },
+                onClose: function() {
+                    console.log('Payment modal closed');
+                }
+            });
+        }
+    });
+});
+</script>
 
 <?php include '../footer.php'; ?>

@@ -2,6 +2,7 @@
 $page_title = "Pesanan Berhasil";
 require_once 'db.php';
 require_once 'config.php';
+require_once 'midtrans_config.php';
 include 'header.php';
 
 // Require login
@@ -93,6 +94,15 @@ if ($status == 'paid') {
                 }
                 ?>
             </div>
+            
+            <?php if ($status == 'pending' && !empty($order['snap_token'])): ?>
+            <!-- Pay Now Button -->
+            <div class="d-grid gap-2 mb-4">
+                <button id="pay-now-btn" class="btn btn-primary btn-lg">
+                    <i class="bi bi-credit-card"></i> Bayar Sekarang
+                </button>
+            </div>
+            <?php endif; ?>
 
             <!-- Order Info Card -->
             <div class="card border-0 shadow-sm mb-4">
@@ -239,5 +249,41 @@ if ($status == 'paid') {
         </div>
     </div>
 </div>
+
+<?php if ($status == 'pending' && !empty($order['snap_token'])): ?>
+<!-- Load Midtrans Snap JS -->
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?php echo MIDTRANS_CLIENT_KEY; ?>"></script>
+<script>
+window.addEventListener('load', function() {
+    const payNowBtn = document.getElementById('pay-now-btn');
+    if (payNowBtn) {
+        payNowBtn.addEventListener('click', function() {
+            if (typeof snap === 'undefined') {
+                alert('Payment gateway sedang dimuat. Silakan coba lagi.');
+                return;
+            }
+            
+            snap.pay('<?php echo $order['snap_token']; ?>', {
+                onSuccess: function(result) {
+                    console.log('Payment success:', result);
+                    window.location.href = '<?php echo BASE_URL; ?>/user/orders.php';
+                },
+                onPending: function(result) {
+                    console.log('Payment pending:', result);
+                    window.location.href = '<?php echo BASE_URL; ?>/user/orders.php';
+                },
+                onError: function(result) {
+                    console.error('Payment error:', result);
+                    alert('Pembayaran gagal! Silakan coba lagi.');
+                },
+                onClose: function() {
+                    console.log('Payment modal closed');
+                }
+            });
+        });
+    }
+});
+</script>
+<?php endif; ?>
 
 <?php include 'footer.php'; ?>

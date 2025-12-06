@@ -110,6 +110,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $snap_token = generate_snap_token($transaction);
 
                     if ($snap_token) {
+                        // Save snap token to database
+                        $snap_token_escaped = escape($snap_token);
+                        $update_token = "UPDATE orders SET snap_token = '$snap_token_escaped' WHERE id = $order_id";
+                        mysqli_query($conn, $update_token);
+                        
                         // Clear cart only after snap token is generated successfully
                         $clear_cart = "DELETE FROM cart WHERE user_id = $user_id";
                         mysqli_query($conn, $clear_cart);
@@ -472,13 +477,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Show Midtrans payment modal
                 snap.pay(data.snap_token, {
                     onSuccess: function(result) {
-                        // Payment successful - redirect to order success page
-                        window.location.href = '<?php echo BASE_URL; ?>/order_success.php?order_id=' + data.order_id;
+                        // Payment successful - redirect to orders page
+                        window.location.href = '<?php echo BASE_URL; ?>/user/orders.php';
                     },
                     onPending: function(result) {
-                        // Payment pending
+                        // Payment pending - redirect to orders page
                         console.log('Pending payment', result);
-                        showAlert('Pembayaran tertunda. Silakan selesaikan transaksi Anda.', 'warning');
+                        window.location.href = '<?php echo BASE_URL; ?>/user/orders.php';
                     },
                     onError: function(result) {
                         // Payment error
@@ -490,8 +495,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     onClose: function() {
                         // User closed modal without completing payment
                         console.log('Customer closed the modal');
-                        // Redirect back to cart page
-                        window.location.href = '<?php echo BASE_URL; ?>/cart.php';
+                        // Redirect to orders page
+                        window.location.href = '<?php echo BASE_URL; ?>/user/orders.php';
                     }
                 });
             } else {

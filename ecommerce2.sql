@@ -2,7 +2,8 @@
 -- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Generation Time: Dec 05, 2025 at 05:38 PM
+-- Host: sql100.infinityfree.com
+-- Generation Time: Dec 06, 2025 at 04:19 AM
 -- Server version: 10.6.22-MariaDB
 -- PHP Version: 7.2.22
 
@@ -18,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ecommerce2`
+-- Database: `if0_40402503_ecommerce2`
 --
 
 -- --------------------------------------------------------
@@ -78,6 +79,7 @@ CREATE TABLE `orders` (
   `user_id` int(11) NOT NULL,
   `total` decimal(12,2) NOT NULL,
   `status` enum('pending','paid','shipped','completed','cancelled') DEFAULT 'pending',
+  `snap_token` varchar(255) DEFAULT NULL,
   `shipping_address` text DEFAULT NULL,
   `shipping_phone` varchar(20) DEFAULT NULL,
   `shipping_city` varchar(100) DEFAULT NULL,
@@ -91,19 +93,32 @@ CREATE TABLE `orders` (
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `user_id`, `total`, `status`, `shipping_address`, `shipping_phone`, `shipping_city`, `shipping_postal_code`, `notes`, `created_at`, `updated_at`) VALUES
-(1, 2, '15750000.00', 'paid', 'Jl. Merdeka No. 123', '08123456789', 'Jakarta', '12345', NULL, '2025-10-09 20:02:43', '2025-10-09 20:02:43'),
-(2, 3, '14500000.00', 'shipped', 'Jl. Sudirman No. 456', '08198765432', 'Bandung', '54321', NULL, '2025-10-09 20:02:43', '2025-10-09 20:02:43'),
-(3, 2, '37500000.00', 'pending', 'Jl. Merdeka No. 123', '08123456789', 'Jakarta', '12345', '', '2025-10-09 21:03:43', '2025-10-09 21:03:43'),
-(4, 2, '0.00', 'cancelled', 'Jl. Merdeka No. 123', '08123456789', 'Jakarta', '12345', '', '2025-10-09 21:05:35', '2025-10-10 08:43:57'),
-(5, 1, '2200000.00', 'cancelled', 'sadfghj', '123456787890o', 'bvn', '12342', '', '2025-10-10 07:59:45', '2025-10-10 08:01:17'),
-(6, 1, '14280000.00', 'pending', 'sadfghj', '123456787890o', 'bvn', '12342', '', '2025-11-13 00:45:12', '2025-11-13 00:45:12'),
-(7, 1, '20000.00', 'pending', 'sadfghj', '123456787890o', 'bvn', '12342', '', '2025-11-13 00:55:57', '2025-11-13 00:55:57'),
-(8, 6, '133000000.00', 'pending', 'ahsbsbjs', '76799794', 'shshsbs', '', '', '2025-11-19 00:49:33', '2025-11-19 00:49:33'),
-(9, 7, '60000.00', 'pending', 'gujjkkm', '054634548484', 'hauah', 'ahauah', 'cah', '2025-11-29 05:50:05', '2025-11-29 05:50:05'),
-(10, 1, '15020000.00', 'pending', 'sadfghj', '123456787890o', 'bvn', '12342', 'nig', '2025-12-04 15:27:34', '2025-12-04 15:27:34'),
-(11, 1, '40000.00', 'pending', 'sadfghj', '123456787890', 'bvn', '12342', '', '2025-12-05 03:47:34', '2025-12-05 03:47:34'),
-(12, 1, '20000.00', 'pending', 'sadfghj', '123456787890', 'bvn', '12342', '', '2025-12-05 03:48:51', '2025-12-05 03:48:51');
+INSERT INTO `orders` (`id`, `user_id`, `total`, `status`, `snap_token`, `shipping_address`, `shipping_phone`, `shipping_city`, `shipping_postal_code`, `notes`, `created_at`, `updated_at`) VALUES
+(1, 2, '15750000.00', 'paid', NULL, 'Jl. Merdeka No. 123', '08123456789', 'Jakarta', '12345', NULL, '2025-10-09 20:02:43', '2025-10-09 20:02:43'),
+(2, 3, '14500000.00', 'shipped', NULL, 'Jl. Sudirman No. 456', '08198765432', 'Bandung', '54321', NULL, '2025-10-09 20:02:43', '2025-10-09 20:02:43'),
+(3, 2, '37500000.00', 'pending', NULL, 'Jl. Merdeka No. 123', '08123456789', 'Jakarta', '12345', '', '2025-10-09 21:03:43', '2025-10-09 21:03:43'),
+(4, 2, '0.00', 'cancelled', NULL, 'Jl. Merdeka No. 123', '08123456789', 'Jakarta', '12345', '', '2025-10-09 21:05:35', '2025-10-10 08:43:57'),
+(5, 1, '2200000.00', 'cancelled', NULL, 'sadfghj', '123456787890o', 'bvn', '12342', '', '2025-10-10 07:59:45', '2025-10-10 08:01:17'),
+(6, 1, '14280000.00', 'pending', NULL, 'sadfghj', '123456787890o', 'bvn', '12342', '', '2025-11-13 00:45:12', '2025-11-13 00:45:12'),
+(7, 1, '20000.00', 'pending', NULL, 'sadfghj', '123456787890o', 'bvn', '12342', '', '2025-11-13 00:55:57', '2025-11-13 00:55:57'),
+(8, 6, '133000000.00', 'pending', NULL, 'ahsbsbjs', '76799794', 'shshsbs', '', '', '2025-11-19 00:49:33', '2025-11-19 00:49:33'),
+(9, 7, '60000.00', 'pending', NULL, 'gujjkkm', '054634548484', 'hauah', 'ahauah', 'cah', '2025-11-29 05:50:05', '2025-11-29 05:50:05'),
+(10, 1, '15020000.00', 'pending', NULL, 'sadfghj', '123456787890o', 'bvn', '12342', 'nig', '2025-12-04 15:27:34', '2025-12-04 15:27:34'),
+(11, 1, '40000.00', 'pending', NULL, 'sadfghj', '123456787890', 'bvn', '12342', '', '2025-12-05 03:47:34', '2025-12-05 03:47:34'),
+(12, 1, '20000.00', 'pending', NULL, 'sadfghj', '123456787890', 'bvn', '12342', '', '2025-12-05 03:48:51', '2025-12-05 03:48:51'),
+(13, 1, '7500000.00', 'pending', NULL, 'Jl melati', '123456787890', 'Sleman', '53149', '', '2025-12-06 07:41:26', '2025-12-06 07:41:26'),
+(14, 9, '25500000.00', 'pending', NULL, 'Jalan Gejayan', '081234567890', 'Sleman', '12345', '-', '2025-12-06 07:55:31', '2025-12-06 07:55:31'),
+(15, 1, '11000000.00', 'pending', NULL, 'Jl melati', '123456787890', 'Sleman', '53149', '', '2025-12-06 07:55:53', '2025-12-06 07:55:53'),
+(16, 1, '7500000.00', 'pending', NULL, 'Jl melati', '123456787890', 'Sleman', '53149', '', '2025-12-06 07:56:57', '2025-12-06 07:56:57'),
+(17, 1, '11000000.00', 'pending', NULL, 'Jl melati', '123456787890', 'Sleman', '53149', '', '2025-12-06 07:59:30', '2025-12-06 07:59:30'),
+(18, 9, '25500000.00', 'pending', NULL, 'Jalan Gejayan Gang Dahlia', '081234567890', 'Sleman', '12345', '', '2025-12-06 08:15:31', '2025-12-06 08:15:31'),
+(19, 9, '25500000.00', 'pending', NULL, 'Jalan Gejayan Gang Dahlia', '081234567890', 'Sleman', '12345', '', '2025-12-06 08:28:21', '2025-12-06 08:28:21'),
+(20, 9, '25500000.00', 'pending', NULL, 'Jalan Gejayan Gang Dahlia', '081234567890', 'Sleman', '12345', '', '2025-12-06 08:33:15', '2025-12-06 08:33:15'),
+(21, 1, '7500000.00', 'pending', '1e310f4f-6e4d-4907-96a5-785edbf871ef', 'Jl melati', '123456787890', 'Sleman', '53149', '', '2025-12-06 09:00:57', '2025-12-06 09:00:58'),
+(22, 9, '25500000.00', 'pending', 'f2514cf6-d38f-4939-9f3d-fe7a3871c078', 'Jalan Gejayan Gang Dahlia', '081234567890', 'Sleman', '12345', '', '2025-12-06 09:09:23', '2025-12-06 09:09:24'),
+(23, 1, '12000000.00', 'pending', '5bd1edac-d564-4750-8113-2df7a1f7c1c2', 'Jl melati', '123456787890', 'Sleman', '53149', '', '2025-12-06 09:11:50', '2025-12-06 09:11:51'),
+(24, 1, '7500000.00', 'pending', '95bf9480-f5c0-4733-816d-5716d01ab49a', 'Jl melati', '123456787890', 'Sleman', '53149', '', '2025-12-06 09:12:31', '2025-12-06 09:12:32'),
+(25, 9, '25500000.00', 'pending', 'dcaa644f-5a99-45da-95d0-68e00747946f', 'Jalan Gejayan Gang Dahlia', '081234567890', 'Sleman', '12345', '', '2025-12-06 09:14:01', '2025-12-06 09:14:01');
 
 -- --------------------------------------------------------
 
@@ -138,7 +153,26 @@ INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `product_name`, `quan
 (13, 10, 1, 'Asus Vivobook 15 OLED', 2, '7500000.00'),
 (14, 10, 15, 'Pin Turtle', 1, '20000.00'),
 (15, 11, 15, 'Pin Turtle', 2, '20000.00'),
-(16, 12, 15, 'Pin Turtle', 1, '20000.00');
+(16, 12, 15, 'Pin Turtle', 1, '20000.00'),
+(17, 13, 1, 'Asus Vivobook 15 OLED', 1, '7500000.00'),
+(18, 14, 1, 'Asus Vivobook 15 OLED', 1, '7500000.00'),
+(19, 14, 5, 'iPhone 14 Pro Max', 1, '18000000.00'),
+(20, 15, 6, 'Xiaomi 13 Pro', 1, '11000000.00'),
+(21, 16, 1, 'Asus Vivobook 15 OLED', 1, '7500000.00'),
+(22, 17, 6, 'Xiaomi 13 Pro', 1, '11000000.00'),
+(23, 18, 1, 'Asus Vivobook 15 OLED', 1, '7500000.00'),
+(24, 18, 5, 'iPhone 14 Pro Max', 1, '18000000.00'),
+(25, 19, 1, 'Asus Vivobook 15 OLED', 1, '7500000.00'),
+(26, 19, 5, 'iPhone 14 Pro Max', 1, '18000000.00'),
+(27, 20, 1, 'Asus Vivobook 15 OLED', 1, '7500000.00'),
+(28, 20, 5, 'iPhone 14 Pro Max', 1, '18000000.00'),
+(29, 21, 1, 'Asus Vivobook 15 OLED', 1, '7500000.00'),
+(30, 22, 1, 'Asus Vivobook 15 OLED', 1, '7500000.00'),
+(31, 22, 5, 'iPhone 14 Pro Max', 1, '18000000.00'),
+(32, 23, 3, 'HP Pavilion Gaming 15', 1, '12000000.00'),
+(33, 24, 1, 'Asus Vivobook 15 OLED', 1, '7500000.00'),
+(34, 25, 1, 'Asus Vivobook 15 OLED', 1, '7500000.00'),
+(35, 25, 5, 'iPhone 14 Pro Max', 1, '18000000.00');
 
 -- --------------------------------------------------------
 
@@ -205,7 +239,9 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `is_admin`, `created_at`
 (5, 'Testku', 'test@gmail.com', 'cc03e747a6afbbcbf8be7668acfebee5', 0, '2025-11-13 05:44:02'),
 (6, 'abcde', 'abcde@gmail.com', '7dee600ff777ef00b0e2341ede871913', 0, '2025-11-19 00:48:03'),
 (7, 'abcde', 'ahsjsj@gmail.com', '1bd00b80a4dc5c21f12eea547737f252', 0, '2025-11-29 05:48:50'),
-(8, 'mirelle', 'mirelle123@gmail.com', '11442b13294f8f9049efdb1e3893a822', 0, '2025-12-05 15:55:00');
+(8, 'mirelle', 'mirelle123@gmail.com', '11442b13294f8f9049efdb1e3893a822', 0, '2025-12-05 15:55:00'),
+(9, 'Nicosius Aldho Wiratama', 'nicosius@gmail.com', '25d55ad283aa400af464c76d713c07ad', 0, '2025-12-06 05:20:37'),
+(10, 'jaden', 'nmnm@gmail.com', '7f3160018843f919debf03a56ac7b8ff', 0, '2025-12-06 08:19:32');
 
 -- --------------------------------------------------------
 
@@ -232,12 +268,13 @@ INSERT INTO `user_info` (`id`, `user_id`, `first_name`, `last_name`, `address`, 
 (1, 2, 'Budi', 'Santoso', 'Jl. Merdeka No. 123', '08123456789', 'Jakarta', '12345'),
 (2, 3, 'Siti', 'Nurhaliza', 'Jl. Sudirman No. 456', '08198765432', 'Bandung', '54321'),
 (3, 2, NULL, NULL, 'Jl. Merdeka No. 123', '08123456789', 'Jakarta', '12345'),
-(4, 1, NULL, NULL, 'sadfghj', '123456787890', 'bvn', '12342'),
-(5, 1, NULL, NULL, 'sadfghj', '123456787890', 'bvn', '12342'),
-(6, 1, NULL, NULL, 'sadfghj', '123456787890', 'bvn', '12342'),
+(4, 1, NULL, NULL, 'Jl melati', '123456787890', 'Sleman', '53149'),
+(5, 1, NULL, NULL, 'Jl melati', '123456787890', 'Sleman', '53149'),
+(6, 1, NULL, NULL, 'Jl melati', '123456787890', 'Sleman', '53149'),
 (7, 6, NULL, NULL, 'ahsbsbjs', '76799794', 'shshsbs', ''),
 (8, 7, NULL, NULL, 'gujjkkm', '054634548484', 'hauah', 'ahauah'),
-(9, 1, NULL, NULL, 'sadfghj', '123456787890', 'bvn', '12342');
+(9, 1, NULL, NULL, 'Jl melati', '123456787890', 'Sleman', '53149'),
+(10, 9, NULL, NULL, 'Jalan Gejayan Gang Dahlia', '081234567890', 'Sleman', '12345');
 
 --
 -- Indexes for dumped tables
@@ -304,7 +341,7 @@ ALTER TABLE `user_info`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -316,13 +353,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -334,13 +371,13 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `user_info`
 --
 ALTER TABLE `user_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables

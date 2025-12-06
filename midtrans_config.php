@@ -17,10 +17,19 @@ define('MIDTRANS_CLIENT_KEY', 'Mid-client-MTEOLBDOBV54rCJL');
 define('MIDTRANS_MERCHANT_ID', 'G123456');
 
 // Base URL untuk redirect setelah pembayaran
-define('MIDTRANS_REDIRECT_URL', BASE_URL . '/order_success.php');
+define('MIDTRANS_REDIRECT_URL', BASE_URL . '/user/orders.php');
 
 // Notification URL untuk webhook dari Midtrans
 define('MIDTRANS_NOTIFICATION_URL', BASE_URL . '/api/midtrans_notification.php');
+
+// Finish URL - redirect after payment success (redirect ke orders.php)
+define('MIDTRANS_FINISH_URL', BASE_URL . '/user/orders.php');
+
+// Unfinish URL - redirect if user cancel payment
+define('MIDTRANS_UNFINISH_URL', BASE_URL . '/user/orders.php');
+
+// Error URL - redirect on payment error
+define('MIDTRANS_ERROR_URL', BASE_URL . '/user/orders.php');
 
 // Set konfigurasi Midtrans
 require_once __DIR__ . '/vendor/midtrans/midtrans-php/Midtrans.php';
@@ -46,6 +55,13 @@ function generate_midtrans_transaction($orderData, $items, $totalAmount) {
         'gross_amount' => intval($totalAmount),
     );
 
+    // Callbacks untuk redirect
+    $callbacks = array(
+        'finish' => MIDTRANS_FINISH_URL . '?order_id=' . $orderData['id'],
+        'unfinish' => MIDTRANS_UNFINISH_URL,
+        'error' => MIDTRANS_ERROR_URL
+    );
+
     $customerDetails = array(
         'first_name' => explode(' ', $orderData['customer_name'])[0],
         'last_name' => implode(' ', array_slice(explode(' ', $orderData['customer_name']), 1)),
@@ -67,6 +83,7 @@ function generate_midtrans_transaction($orderData, $items, $totalAmount) {
         'transaction_details' => $transactionDetails,
         'customer_details' => $customerDetails,
         'item_details' => $itemDetails,
+        'callbacks' => $callbacks,
     );
 
     return $transaction;

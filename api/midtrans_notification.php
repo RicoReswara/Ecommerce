@@ -76,8 +76,25 @@ try {
                     WHERE id = $orderIdDb";
 
     if (mysqli_query($conn, $updateQuery)) {
+        // Update stock jika status paid
+        if ($orderStatus == 'paid') {
+            // Get order items
+            $items_query = "SELECT product_id, quantity FROM order_items WHERE order_id = $orderIdDb";
+            $items_result = mysqli_query($conn, $items_query);
+            
+            while ($item = mysqli_fetch_assoc($items_result)) {
+                $product_id = $item['product_id'];
+                $quantity = $item['quantity'];
+                
+                // Update stock
+                $update_stock = "UPDATE products SET stock = stock - $quantity WHERE id = $product_id";
+                mysqli_query($conn, $update_stock);
+            }
+        }
+        
         // Log transaksi
         error_log("Order #$orderIdDb updated: Status=$orderStatus from Midtrans transaction: $transactionStatus");
+        error_log("Full notification data: " . json_encode($data));
         
         http_response_code(200);
         echo json_encode(['status' => 'success', 'message' => 'Order updated']);
